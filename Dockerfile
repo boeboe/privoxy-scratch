@@ -19,7 +19,6 @@ RUN apk --no-cache add \
         zlib-dev \
         pcre2-dev
 
-
 RUN set -eux; \
     \
     cd ${BUILD_DIR}; \
@@ -30,8 +29,16 @@ RUN set -eux; \
     autoconf; \
     ./configure \
       --prefix=${BUILD_DIR}/privoxy/dist \
+      --disable-dynamic-pcre \
+      --enable-accept-filter \
+      --enable-compression \
+      --enable-extended-statistics \
+      --enable-external-filters \
+      --enable-graceful-termination \
+      --enable-no-gifs \
+      --enable-pcre-host-patterns \
       --enable-static-linking \
-      --disable-dynamic-pcre; \
+      --enable-strptime-sanity-checks; \
     make -j4; \
     make install; \
     scanelf -R --nobanner -F '%F' ${BUILD_DIR}/privoxy/dist/sbin/ | xargs strip
