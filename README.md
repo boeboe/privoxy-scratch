@@ -14,35 +14,20 @@ Run [PRIVOXY](https://www.privoxy.org/) conveniently from a docker scratch conta
 ## Usage
 
 ```console
-$ docker run --rm --network host boeboe/privoxy-scratch
+$ docker run -p 8118:8118 -v "$(pwd)"/config:/etc/privoxy boeboe/privoxy-scratch
 ```
 
 Once the docker container has finished starting, you can test it with the following command:
 
 ```console
-$ curl --socks5 localhost:9050 --socks5-hostname localhost:9050 https://check.torproject.org/api/ip
+$ curl --proxy "http://localhost:8118" http://config.privoxy.org
 ```
 
 > **NOTE:** If you use do not use host network, you need to force tor to listen on `0.0.0.0` instead of the default `127.0.0.1`
 
-In order to pass a `torrc` configuration file and modify the exposed proxy port:
-
-```console
-$ cat torrc 
-Log notice stdout
-HTTPTunnelPort 0.0.0.0:9080
-SocksPort 0.0.0.0:9050
-MaxCircuitDirtiness 30
-
-$ docker run -p 8050:9050 -p 8080:9080 -v "$(pwd)"/torrc:/torrc boeboe/privoxy-scratch tor -f torrc
-
-$ curl --socks5 localhost:8050 --socks5-hostname localhost:8050 https://check.torproject.org/api/ip
-$ curl --proxy localhost:8080 https://check.torproject.org/api/ip
-```
-
 ## Manual page
 
-Man page of version [0.4.8.14](https://dist.torproject.org/tor-0.4.8.14.tar.gz) can be found [here](./MANPAGE.md).
+Man page of version [4.0.0](https://www.privoxy.org/sf-download-mirror/Sources/4.0.0%20%28stable%29/privoxy-4.0.0-stable-src.tar.gz) can be found [here](./MANPAGE.md).
 
 ## Request configuration change
 
